@@ -24,8 +24,13 @@ public class BookService {
     private final BookJdbcRepository bookJdbcRepository;
 
     @Transactional(readOnly = true)
-    public List<BookResponse> getBooks() {
-        return bookRepository.findAllByOrderByBookIdDesc().stream()
+    public List<BookResponse> getBooks(String keyword) {
+        // keyword가 없으면 전체 목록, 있으면 제목 검색 결과를 반환합니다.
+        List<Book> books = (keyword == null || keyword.isBlank())
+                ? bookRepository.findAllByOrderByBookIdDesc()
+                : bookRepository.findByTitleContainingOrderByBookIdDesc(keyword);
+
+        return books.stream()
                 .map(BookResponse::from)
                 .toList();
     }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,9 +27,10 @@ public class BookController {
     private final BookService bookService;
 
     // 3. HTTP GET 방식으로 /books 요청이 들어왔을 때 이 메서드가 실행됩니다.
+    // GET /books?keyword=스프링 처럼 keyword를 붙이면 제목 검색 결과만 반환합니다.
     @GetMapping
-    public List<BookResponse> getBooks() {
-        return bookService.getBooks();
+    public List<BookResponse> getBooks(@RequestParam(required = false) String keyword) {
+        return bookService.getBooks(keyword);
     }
 
     // GET http://localhost:8080/books/category/{categoryId}
